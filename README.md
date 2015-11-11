@@ -13,7 +13,7 @@ To Develop on this project:
 * Make a fork
 * `npm install`
 * `gem install sass`
-* `cp src/scripts/development.config.json.example src/scripts/development.config.json` and fill in the empty values.
+* `cp src/scripts/development.config.json.example src/scripts/development.config.json` and fill in the empty values. (More info in the Integrating and Testing Against the LMS section)
 
 Useful commands:
 
@@ -75,7 +75,7 @@ data store during the early development phase.
 We are using the [blaze compiler](https://github.com/firebase/blaze_compiler) to generate
 rules for our data. Install it with `npm install -g blaze_compiler`.
 
-Intergrating and Testing Against the LMS
+Integrating and Testing Against the LMS
 ========================================
 
 If you are doing app development that requires integration with
@@ -106,5 +106,16 @@ In the console type:
 ```
  FirebaseApp.create :name => "quillgrammarstaging", :secret => "Secret key from firebase"
 ```
-
 If you need your secret key, go to the `secrets` page of your firebase app admin panel. Once you've created a FirebaseApp instance in the console, take that 'name' value and plug it into the `firebaseApp` field of your `development.config.json` file, e.g. `"firebaseApp": "quillgrammarstaging"`.
+
+You will also need to change the `form` and `module` urls for the activity classifications, so that they will run locally. Assuming you are running Quill Grammar off of port 3001, in the console type:
+
+```
+ActivityClassification.find_by(name:"sentence").update(form_url: "http://localhost:3001/play/sw",module_url: "http://localhost:3001/play/sw")
+
+ActivityClassification.find_by(name:"passage").update(form_url: "http://localhost:3001/play/pf",module_url: "http://localhost:3001/play/pf")
+```
+
+To verify that you are running Quill Grammar locally, navigate to an activity or just click [here](http://localhost:3000/activity_sessions/anonymous?activity_id=159) and confirm that the iframe with the `id="activity-iframe"`'s source includes your local host.
+
+
